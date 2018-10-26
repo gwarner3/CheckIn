@@ -69,6 +69,7 @@ namespace CheckInWeb.Controllers
             checkIn.Location = location;
             checkIn.Time = DateTime.Now;
             repository.Insert(checkIn);
+            repository.SaveChanges();
 
 
             // check to see if this user meets any achievements
@@ -76,32 +77,17 @@ namespace CheckInWeb.Controllers
             var allAchievements = repository.Query<Achievement>();
             var allLocationIds = repository.Query<Location>().Select(l => l.Id);
 
-            
-
-            // two in one day?
-            //if (!allAchievements.Any(a => a.Type == AchievementType.TwoInOneDay) && allCheckins.Count(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today) > 2)
-            //{
-            //    var twoInOneDay = new Achievement { Type = AchievementType.TwoInOneDay, User = user, TimeAwarded = DateTime.Now };
-            //    repository.Insert(twoInOneDay);
-            //}
-
-
-            //how many checkins with todays date
-            var checkInsOnTodaysDate = allCheckins.Count(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today);
 
             //two in one day?
+            var checkInsOnTodaysDate = allCheckins.Count(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today);
+
             if (checkInsOnTodaysDate == 1)
             {
                 var twoInOneDay = new Achievement { Type = AchievementType.TwoInOneDay, User = user, TimeAwarded = DateTime.Now };
                 repository.Insert(twoInOneDay);
             }
 
-            var hasAll = false;
-            var allCheckInsLocationIds = allCheckins.Select(i => i.Location.Id).ToList();
-            for (int i = 0; i < allLocationIds.Count(); i++)
-            {
-                //if (allLocationIds[i])
-            }
+            // all locations?
 
             // all locations?
             //var hasAll = false;
@@ -109,12 +95,31 @@ namespace CheckInWeb.Controllers
             //{
             //    hasAll = hasAll || allCheckins.Any(c => c.Location.Id == testLocationId);
             //}
+            var hasAll = false;
 
-            //if (!allAchievements.Any(a => a.Type == AchievementType.AllLocations) && hasAll)
-            //{
-            //    var allLocations = new Achievement { Type = AchievementType.AllLocations, User = user, TimeAwarded = DateTime.Now };
-            //    repository.Insert(allLocations);
-            //}
+            foreach (var testLocationId in allLocationIds)
+            {
+                hasAll = false || allCheckins.Any(c => c.Location.Id == testLocationId);
+
+                if (!hasAll)
+                {
+                    break;
+                }
+
+                //if (!allCheckins.Any(c => c.Location.Id == testLocationId))
+                //{
+                //    hasAll = false;
+                //    break;
+                //}
+
+                //hasAll = true;
+            }
+
+            if (!allAchievements.Any(a => a.Type == AchievementType.AllLocations) && hasAll)
+            {
+                var allLocations = new Achievement { Type = AchievementType.AllLocations, User = user, TimeAwarded = DateTime.Now };
+                repository.Insert(allLocations);
+            }
 
             // some day we'll have hundreds of achievements!
 
