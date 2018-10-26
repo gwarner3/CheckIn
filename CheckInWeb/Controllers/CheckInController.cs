@@ -97,12 +97,10 @@ namespace CheckInWeb.Controllers
             }
 
             var hasAll = false;
-            foreach (var locationIds in allLocationIds)
+            var allCheckInsLocationIds = allCheckins.Select(i => i.Location.Id).ToList();
+            for (int i = 0; i < allLocationIds.Count(); i++)
             {
-                //if (expr)
-                //{
-                    
-                //}
+                //if (allLocationIds[i])
             }
 
             // all locations?
