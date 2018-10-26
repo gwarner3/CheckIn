@@ -79,9 +79,9 @@ namespace CheckInWeb.Controllers
 
 
             //two in one day?
-            var checkInsOnTodaysDate = allCheckins.Count(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today);
+            var checkInsToday = allCheckins.Count(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today);
 
-            if (checkInsOnTodaysDate == 1)
+            if (checkInsToday == 1)
             {
                 var twoInOneDay = new Achievement { Type = AchievementType.TwoInOneDay, User = user, TimeAwarded = DateTime.Now };
                 repository.Insert(twoInOneDay);
