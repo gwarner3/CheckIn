@@ -88,13 +88,6 @@ namespace CheckInWeb.Controllers
             }
 
             // all locations?
-
-            // all locations?
-            //var hasAll = false;
-            //foreach (var testLocationId in allLocationIds)
-            //{
-            //    hasAll = hasAll || allCheckins.Any(c => c.Location.Id == testLocationId);
-            //}
             var hasAll = false;
 
             foreach (var testLocationId in allLocationIds)
@@ -105,14 +98,6 @@ namespace CheckInWeb.Controllers
                 {
                     break;
                 }
-
-                //if (!allCheckins.Any(c => c.Location.Id == testLocationId))
-                //{
-                //    hasAll = false;
-                //    break;
-                //}
-
-                //hasAll = true;
             }
 
             if (!allAchievements.Any(a => a.Type == AchievementType.AllLocations) && hasAll)
