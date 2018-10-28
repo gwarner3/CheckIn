@@ -71,12 +71,32 @@ namespace CheckInWeb.Controllers
             repository.Insert(checkIn);
             repository.SaveChanges();
 
-
+            //Move to separate class
             // check to see if this user meets any achievements
             var allCheckins = repository.Query<CheckIn>().Where(c => c.User.Id == user.Id);
             var allAchievements = repository.Query<Achievement>();
             var allLocationIds = repository.Query<Location>().Select(l => l.Id);
-            
+            var allAtThisLocationToday = repository.Query<CheckIn>()
+                .Where(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today
+                            //&& c.User.Id != user.Id
+                            && c.Location.Id == checkIn.Location.Id);
+                            //&& DbFunctions.TruncateTime(c.Time) >= DateTime.Now.AddHours(-1));
+                //&& DbFunctions.TruncateTime(c.Time) <= DateTime.Now.AddHours(1))
+                //.GroupBy(c => c.Location.Id);
+
+            foreach (var otherCheckIn in allAtThisLocationToday)
+            {
+                var inTogetherAwardedToday = allAchievements.Any(u => u.User.Id == otherCheckIn.User.Id
+                                                                      && DbFunctions.TruncateTime((DateTime?) u.TimeAwarded) == DateTime.Today
+                                                                      && u.Type == AchievementType.InTogether);
+
+                if (allAtThisLocationToday.Count() > 1 && !inTogetherAwardedToday && (otherCheckIn.Time >= DateTime.Now.AddHours(-1) || otherCheckIn.Time <= DateTime.Now.AddHours(-1)))
+                {
+                    var inTogether = new Achievement { Type = AchievementType.InTogether, User = otherCheckIn.User, TimeAwarded = DateTime.Now };
+                    repository.Insert(inTogether);
+                }
+            }
+
             //two in one day?
             var uniqueCheckInsToday = allCheckins.Where(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today)
                 .GroupBy(i => i.Location.Id);
