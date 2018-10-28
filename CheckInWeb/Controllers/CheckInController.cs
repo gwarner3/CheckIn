@@ -76,12 +76,12 @@ namespace CheckInWeb.Controllers
             var allCheckins = repository.Query<CheckIn>().Where(c => c.User.Id == user.Id);
             var allAchievements = repository.Query<Achievement>();
             var allLocationIds = repository.Query<Location>().Select(l => l.Id);
-
-
+            
             //two in one day?
-            var checkInsToday = allCheckins.Count(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today);
+            var uniqueCheckInsToday = allCheckins.Where(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today)
+                .GroupBy(i => i.Location.Id);
 
-            if (!allAchievements.Any(a => a.Type == AchievementType.TwoInOneDay) && checkInsToday == 2)
+            if (!allAchievements.Any(a => a.Type == AchievementType.TwoInOneDay) && uniqueCheckInsToday.Count() == 2)
             {
                 var twoInOneDay = new Achievement { Type = AchievementType.TwoInOneDay, User = user, TimeAwarded = DateTime.Now };
                 repository.Insert(twoInOneDay);
