@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using CheckInWeb.Data.Context;
+using CheckInWeb.Data.Entities;
 using CheckInWeb.Data.Repositories;
 using CheckInWeb.Models;
 
@@ -32,6 +34,16 @@ namespace CheckInWeb.Controllers
                 .ToList();
 
             return this.View(model);
+        }
+
+        public ActionResult AddLocation(Location location)
+        {
+            var repository = new Repository(new CheckInDatabaseContext());
+            var newLocation = new Location {Name = location.Name};
+            repository.Insert(newLocation);
+            repository.SaveChanges();
+            
+            return View();
         }
     }
 }

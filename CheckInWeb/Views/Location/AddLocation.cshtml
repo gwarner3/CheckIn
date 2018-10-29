@@ -1,0 +1,17 @@
+﻿@model CheckInWeb.Models.AddLocationViewModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+<h2>title</h2>
+
+
+@using (@Html.BeginForm("AddLocation","Location"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, "TextBox", new {@class = "form-control"})
+        <button type="submit">Save</button>
+    </div>
+    }

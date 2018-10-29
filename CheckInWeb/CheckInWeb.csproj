@@ -169,6 +169,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AddLocationViewModel.cs" />
     <Compile Include="Models\CheckInViewModel.cs" />
     <Compile Include="Models\LocationIndexViewModel.cs" />
     <Compile Include="Models\MyCheckInViewModel.cs" />
@@ -228,6 +229,7 @@
     <Content Include="Views\CheckIn\Index.cshtml" />
     <Content Include="Views\Location\Index.cshtml" />
     <Content Include="Views\Achievement\Index.cshtml" />
+    <Content Include="Views\Location\AddLocation.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
