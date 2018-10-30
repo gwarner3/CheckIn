@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using CheckInWeb.Data.Context;
 using CheckInWeb.Data.Entities;
@@ -38,10 +39,14 @@ namespace CheckInWeb.Controllers
 
         public ActionResult AddLocation(Location location)
         {
-            var repository = new Repository(new CheckInDatabaseContext());
-            var newLocation = new Location {Name = location.Name};
-            repository.Insert(newLocation);
-            repository.SaveChanges();
+            if (!String.IsNullOrEmpty(location.Name.Trim()))
+            {
+                var repository = new Repository(new CheckInDatabaseContext());
+                var newLocation = new Location {Name = location.Name};
+                repository.Insert(newLocation);
+                repository.SaveChanges();
+            }
+            
             
             return View();
         }
