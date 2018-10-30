@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201810300100460_SeedAdminUser.cs" />
+    <Compile Include="Migrations\201810300100460_SeedAdminUser.Designer.cs">
+      <DependentUpon>201810300100460_SeedAdminUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\ICheckInRepository.cs" />
     <Compile Include="Repositories\IAsyncRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
@@ -95,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201403131512254_RemoveUserId2.resx">
       <DependentUpon>201403131512254_RemoveUserId2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810300100460_SeedAdminUser.resx">
+      <DependentUpon>201810300100460_SeedAdminUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

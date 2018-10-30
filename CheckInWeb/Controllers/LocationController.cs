@@ -37,17 +37,19 @@ namespace CheckInWeb.Controllers
             return this.View(model);
         }
 
+
+        [Authorize(Roles = "Admin")]
         public ActionResult AddLocation(Location location)
         {
-            if (!String.IsNullOrEmpty(location.Name.Trim()))
+
+            if (!string.IsNullOrEmpty(location.Name))
             {
                 var repository = new Repository(new CheckInDatabaseContext());
-                var newLocation = new Location {Name = location.Name};
+                var newLocation = new Location { Name = location.Name.Trim() };
                 repository.Insert(newLocation);
                 repository.SaveChanges();
             }
-            
-            
+
             return View();
         }
     }

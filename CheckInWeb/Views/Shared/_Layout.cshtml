@@ -24,6 +24,10 @@
                     <li>@Html.ActionLink("Locations", "Index", "Location")</li>
                     <li>@Html.ActionLink("Check Ins", "Index", "CheckIn")</li>
                     <li>@Html.ActionLink("Achievements", "Index", "Achievement")</li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Add Location", "AddLocation", "Location")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
