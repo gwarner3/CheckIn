@@ -77,20 +77,19 @@ namespace CheckInWeb.Controllers
             var allAchievements = repository.Query<Achievement>();
             var allLocationIds = repository.Query<Location>().Select(l => l.Id);
             var allAtThisLocationToday = repository.Query<CheckIn>()
-                .Where(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today
-                            //&& c.User.Id != user.Id
+                            .Where(c => DbFunctions.TruncateTime(c.Time) == DateTime.Today
                             && c.Location.Id == checkIn.Location.Id);
-                            //&& DbFunctions.TruncateTime(c.Time) >= DateTime.Now.AddHours(-1));
-                //&& DbFunctions.TruncateTime(c.Time) <= DateTime.Now.AddHours(1))
-                //.GroupBy(c => c.Location.Id);
 
             foreach (var otherCheckIn in allAtThisLocationToday)
             {
+                var achievementsToday = repository.Query<Achievement>().Where(i =>
+                    i.User.Id == otherCheckIn.User.Id && i.TimeAwarded == DateTime.Today && i.Type == AchievementType.InTogether);
+
                 var inTogetherAwardedToday = allAchievements.Any(u => u.User.Id == otherCheckIn.User.Id
                                                                       && DbFunctions.TruncateTime((DateTime?) u.TimeAwarded) == DateTime.Today
                                                                       && u.Type == AchievementType.InTogether);
 
-                if (allAtThisLocationToday.Count() > 1 && !inTogetherAwardedToday && (otherCheckIn.Time >= DateTime.Now.AddHours(-1) || otherCheckIn.Time <= DateTime.Now.AddHours(-1)))
+                if (allAtThisLocationToday.Count() > 1 && !inTogetherAwardedToday && (otherCheckIn.Time >= DateTime.Now.AddHours(-1) || otherCheckIn.Time >= DateTime.Now.AddHours(-1)))
                 {
                     var inTogether = new Achievement { Type = AchievementType.InTogether, User = otherCheckIn.User, TimeAwarded = DateTime.Now };
                     repository.Insert(inTogether);
